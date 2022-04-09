@@ -5,15 +5,12 @@ import com.github.slaout.immutability.exercise1.domain.edit.Edit;
 import com.github.slaout.immutability.exercise1.domain.edit.User;
 import com.github.slaout.immutability.exercise1.domain.product.Ean;
 import com.github.slaout.immutability.exercise1.domain.report.Currency;
-import com.github.slaout.immutability.exercise1.domain.report.Price;
 import com.github.slaout.immutability.exercise1.domain.report.PriceReport;
 import com.github.slaout.immutability.exercise1.exception.UnknownCurrencyException;
 import com.github.slaout.immutability.exercise1.exception.UnknownReportException;
 import com.github.slaout.immutability.exercise1.repository.CurrencyRepository;
 import com.github.slaout.immutability.exercise1.repository.PriceReportRepository;
 import lombok.RequiredArgsConstructor;
-
-import java.time.Instant;
 
 @RequiredArgsConstructor
 public class UpdateCurrencyUseCase {
@@ -28,12 +25,9 @@ public class UpdateCurrencyUseCase {
         Currency newCurrency = currencyRepository.getCurrency(newCurrencyCode)
                 .orElseThrow(UnknownCurrencyException::new);
 
-        report.setPrice(new Price(
-                report.getPrice().getAmount(),
-                report.getPrice().getLastAmountEdit(),
+        report.setPrice(report.getPrice().withEditedCurrency(
                 newCurrency,
-                new Edit(connectedUser, Instant.now(), Action.EDITION)));
-        // TODO with*() or static factory
+                Edit.now(connectedUser, Action.EDITION)));
 
         priceReportRepository.save(report);
 

@@ -9,4 +9,8 @@ public class Edit {
     User user;
     Instant instant;
     Action action;
+
+    public static Edit now(User user, Action action) {
+        return new Edit(user, Instant.now(), action);
+    }
 }

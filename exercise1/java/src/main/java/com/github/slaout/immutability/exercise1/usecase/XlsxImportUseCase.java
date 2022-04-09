@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -47,7 +46,7 @@ public class XlsxImportUseCase {
                 .findFirst()
                 .orElseThrow(UnknownCurrencyException::new);
 
-        Edit lastEdit = new Edit(connectedUser, Instant.now(), Action.IMPORT);
+        Edit lastEdit = Edit.now(connectedUser, Action.IMPORT);
 
         report.setPrice(new Price(
                 row.getNewAmount(),

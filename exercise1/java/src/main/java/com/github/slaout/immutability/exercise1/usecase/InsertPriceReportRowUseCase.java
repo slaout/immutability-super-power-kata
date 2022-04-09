@@ -17,8 +17,6 @@ import com.github.slaout.immutability.exercise1.repository.ProductRepository;
 import com.github.slaout.immutability.exercise1.repository.SellerRepository;
 import lombok.RequiredArgsConstructor;
 
-import java.time.Instant;
-
 @RequiredArgsConstructor
 public class InsertPriceReportRowUseCase {
 
@@ -35,13 +33,9 @@ public class InsertPriceReportRowUseCase {
         Product product = productRepository.getProduct(productEan).orElseThrow(UnknownProductException::new);
         Seller seller = sellerRepository.getSeller(sellerId).orElseThrow(UnknownSellerException::new);
 
-        Edit creationEdit = new Edit(connectedUser, Instant.now(), Action.CREATION);
-
-        Price price = new Price(
-                null, // At creation, user has not entered any amount yet
-                creationEdit,
+        Price price = Price.create(
                 currencyRepository.getDefaultCurrency(),
-                creationEdit);
+                Edit.now(connectedUser, Action.CREATION));
 
         PriceReport report = new PriceReport(product, seller, price);
 

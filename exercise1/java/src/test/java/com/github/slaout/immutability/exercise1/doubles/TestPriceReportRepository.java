@@ -2,6 +2,7 @@ package com.github.slaout.immutability.exercise1.doubles;
 
 import com.github.slaout.immutability.exercise1.domain.edit.Action;
 import com.github.slaout.immutability.exercise1.domain.edit.Edit;
+import com.github.slaout.immutability.exercise1.domain.edit.User;
 import com.github.slaout.immutability.exercise1.domain.product.Ean;
 import com.github.slaout.immutability.exercise1.domain.product.Product;
 import com.github.slaout.immutability.exercise1.domain.report.Currency;
@@ -11,7 +12,6 @@ import com.github.slaout.immutability.exercise1.domain.report.Seller;
 import com.github.slaout.immutability.exercise1.repository.PriceReportRepository;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -27,9 +27,8 @@ public class TestPriceReportRepository implements PriceReportRepository {
         Currency euro = new Currency("EUR", BigDecimal.ONE);
         Currency yuan = new Currency("CNY", new BigDecimal("0.14"));
 
-        Edit edit1 = new Edit(Instant.now(), Action.CREATION);
-        edit1.setLogin("someone@gmail.com");
-        edit1.setFullName("Someone");
+        User user = new User("someone@gmail.com", "Someone");
+        Edit edit1 = Edit.now(user, Action.CREATION);
 
         return List.of(
                 new PriceReport(titanicCd, auchanV2, new Price(new BigDecimal("14.99"), edit1, euro, edit1)),
