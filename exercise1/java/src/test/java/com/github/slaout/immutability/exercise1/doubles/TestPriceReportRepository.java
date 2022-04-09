@@ -31,8 +31,8 @@ public class TestPriceReportRepository implements PriceReportRepository {
         Edit edit1 = Edit.now(user, Action.CREATION);
 
         return List.of(
-                new PriceReport(titanicCd, auchanV2, new Price(new BigDecimal("14.99"), edit1, euro, edit1)),
-                new PriceReport(titanicCd, alliExpressCom, new Price(new BigDecimal("9.99"), edit1, yuan, edit1)));
+                new PriceReport(titanicCd, auchanV2, Price.restoreFromDatabase(new BigDecimal("14.99"), edit1, euro, edit1)),
+                new PriceReport(titanicCd, alliExpressCom, Price.restoreFromDatabase(new BigDecimal("9.99"), edit1, yuan, edit1)));
     }
 
     public Optional<PriceReport> getReport(Ean productEan, long sellerId) {

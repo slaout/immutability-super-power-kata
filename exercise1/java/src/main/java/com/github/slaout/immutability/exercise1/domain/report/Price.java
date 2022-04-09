@@ -22,7 +22,14 @@ public class Price {
                 creationEdit);
     }
 
-    public Price(BigDecimal amount, Edit lastAmountEdit, Currency currency, Edit lastCurrencyEdit) {
+    public static Price restoreFromDatabase(BigDecimal amount,
+                                            Edit lastAmountEdit,
+                                            Currency currency,
+                                            Edit lastCurrencyEdit) {
+        return new Price(amount, lastAmountEdit, currency, lastCurrencyEdit);
+    }
+
+    private Price(BigDecimal amount, Edit lastAmountEdit, Currency currency, Edit lastCurrencyEdit) {
         this.amount = amount; // Null if user did not enter anything yet, or if user erased the input
         this.lastAmountEdit = Objects.requireNonNull(lastAmountEdit, "lastAmountEdit");
         this.currency = Objects.requireNonNull(currency, "currency");

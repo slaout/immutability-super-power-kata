@@ -5,7 +5,6 @@ import com.github.slaout.immutability.exercise1.domain.edit.Edit;
 import com.github.slaout.immutability.exercise1.domain.edit.User;
 import com.github.slaout.immutability.exercise1.domain.product.Ean;
 import com.github.slaout.immutability.exercise1.domain.report.Currency;
-import com.github.slaout.immutability.exercise1.domain.report.Price;
 import com.github.slaout.immutability.exercise1.domain.report.PriceReport;
 import com.github.slaout.immutability.exercise1.exception.UnknownCurrencyException;
 import com.github.slaout.immutability.exercise1.exception.UnknownReportException;
