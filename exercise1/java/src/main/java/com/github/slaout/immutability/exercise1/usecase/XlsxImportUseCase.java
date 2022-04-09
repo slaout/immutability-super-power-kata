@@ -52,8 +52,7 @@ public class XlsxImportUseCase {
         Edit lastEdit = report.getPrice().getLastAmountEdit();
         // TODO[TRUE STORY] BUG: Missing Action.IMPORT
         lastEdit.setInstant(Instant.now());
-        lastEdit.setLogin(connectedUser.getLogin());
-        lastEdit.setFullName(connectedUser.getFullName());
+        lastEdit.setUser(connectedUser);
         // TODO[TRUE STORY] BUG: Missing lastCurrencyEdit
     }
 

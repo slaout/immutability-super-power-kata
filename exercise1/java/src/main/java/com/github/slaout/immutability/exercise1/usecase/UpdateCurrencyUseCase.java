@@ -32,8 +32,7 @@ public class UpdateCurrencyUseCase {
         Edit lastEdit = new Edit();
         lastEdit.setAction(Action.EDITION);
         lastEdit.setInstant(Instant.now());
-        lastEdit.setLogin(connectedUser.getLogin());
-        lastEdit.setFullName(connectedUser.getFullName());
+        lastEdit.setUser(connectedUser);
         report.getPrice().setLastAmountEdit(lastEdit); // TODO[TRUE STORY] BUG: Wrong edit
 
         priceReportRepository.save(report);

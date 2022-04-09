@@ -38,8 +38,7 @@ public class InsertPriceReportRowUseCase {
         Edit creationEdit = new Edit();
         creationEdit.setAction(Action.CREATION);
         creationEdit.setInstant(Instant.now());
-        creationEdit.setLogin(connectedUser.getLogin());
-        creationEdit.setFullName(connectedUser.getFullName());
+        creationEdit.setUser(connectedUser);
 
         Price price = Price.builder()
                 // TODO[TRUE STORY] STRANGE: amount not set; intentionally null or forgot to set it?

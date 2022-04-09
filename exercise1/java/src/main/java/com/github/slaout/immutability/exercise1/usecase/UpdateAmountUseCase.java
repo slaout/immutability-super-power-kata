@@ -25,8 +25,7 @@ public class UpdateAmountUseCase {
         Edit lastEdit = report.getPrice().getLastAmountEdit();
         lastEdit.setAction(Action.EDITION);
         // TODO[TRUE STORY] BUG: Missing Instant
-        lastEdit.setLogin(connectedUser.getLogin());
-        lastEdit.setFullName(connectedUser.getFullName());
+        lastEdit.setUser(connectedUser);
 
         priceReportRepository.save(report);
 
