@@ -48,11 +48,9 @@ public class XlsxImportUseCase {
 
         Edit lastEdit = Edit.now(connectedUser, Action.IMPORT);
 
-        report.setPrice(new Price(
-                row.getNewAmount(),
-                lastEdit,
-                newCurrency,
-                lastEdit));
+        report.setPrice(report.getPrice()
+                .withEditedAmount(row.getNewAmount(), lastEdit)
+                .withEditedCurrency(newCurrency, lastEdit));
     }
 
     @Value

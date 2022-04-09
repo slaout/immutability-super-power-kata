@@ -4,6 +4,7 @@ import com.github.slaout.immutability.exercise1.domain.edit.Edit;
 import lombok.Value;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Value
 public class Price {
@@ -21,7 +22,18 @@ public class Price {
                 creationEdit);
     }
 
+    public Price(BigDecimal amount, Edit lastAmountEdit, Currency currency, Edit lastCurrencyEdit) {
+        this.amount = amount; // Null if user did not enter anything yet, or if user erased the input
+        this.lastAmountEdit = Objects.requireNonNull(lastAmountEdit, "lastAmountEdit");
+        this.currency = Objects.requireNonNull(currency, "currency");
+        this.lastCurrencyEdit = Objects.requireNonNull(lastCurrencyEdit, "lastCurrencyEdit");
+    }
+
     public Price withEditedAmount(BigDecimal editedAmount, Edit edit) {
+        if (Objects.equals(this.amount, editedAmount)) {
+            return this;
+        }
+
         return new Price(
                 editedAmount,
                 edit,
@@ -30,6 +42,10 @@ public class Price {
     }
 
     public Price withEditedCurrency(Currency editedCurrency, Edit edit) {
+        if (Objects.equals(this.currency, editedCurrency)) {
+            return this;
+        }
+
         return new Price(
                 this.amount,
                 this.lastAmountEdit,
