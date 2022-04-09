@@ -42,6 +42,8 @@ public class InsertPriceReportRowUseCase {
         creationEdit.setFullName(connectedUser.getFullName());
 
         Price price = Price.builder()
+                // TODO[TRUE STORY] STRANGE: amount not set; intentionally null or forgot to set it?
+                // TODO[TRUE STORY] BUG: Missing amount CREATION Edit
                 .currency(currencyRepository.getDefaultCurrency())
                 .lastCurrencyEdit(creationEdit)
                 .build();
