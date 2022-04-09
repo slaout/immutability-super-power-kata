@@ -1,6 +1,7 @@
 package com.github.slaout.immutability.exercise1.usecase;
 
 import com.github.slaout.immutability.exercise1.domain.report.Currency;
+import com.github.slaout.immutability.exercise1.domain.report.Price;
 import com.github.slaout.immutability.exercise1.domain.report.PriceReport;
 import com.github.slaout.immutability.exercise1.repository.CurrencyRepository;
 import com.github.slaout.immutability.exercise1.repository.PriceReportRepository;
@@ -31,7 +32,12 @@ public class GetPriceReportsUseCase {
 
         for (PriceReport report : reports) {
             Currency currency = report.getPrice().getCurrency();
-            currency.setExchangeRateToEuro(exchangeRates.get(currency.getCode()));
+            report.setPrice(new Price(
+                    report.getPrice().getAmount(),
+                    report.getPrice().getLastAmountEdit(),
+                    new Currency(currency.getCode(), exchangeRates.get(currency.getCode())),
+                    report.getPrice().getLastCurrencyEdit()));
+            // TODO with*() or static factory
         }
     }
 

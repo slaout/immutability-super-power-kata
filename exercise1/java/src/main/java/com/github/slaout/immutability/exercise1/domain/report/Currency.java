@@ -1,13 +1,11 @@
 package com.github.slaout.immutability.exercise1.domain.report;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Value;
 
 import java.math.BigDecimal;
 
-@Data
-@AllArgsConstructor
+@Value
 public class Currency {
-    private String code;
-    private BigDecimal exchangeRateToEuro;
+    String code;
+    BigDecimal exchangeRateToEuro;
 }

@@ -5,6 +5,7 @@ import com.github.slaout.immutability.exercise1.domain.edit.Edit;
 import com.github.slaout.immutability.exercise1.domain.edit.User;
 import com.github.slaout.immutability.exercise1.domain.product.Ean;
 import com.github.slaout.immutability.exercise1.domain.report.Currency;
+import com.github.slaout.immutability.exercise1.domain.report.Price;
 import com.github.slaout.immutability.exercise1.domain.report.PriceReport;
 import com.github.slaout.immutability.exercise1.exception.UnknownCurrencyException;
 import com.github.slaout.immutability.exercise1.exception.UnknownReportException;
@@ -27,13 +28,12 @@ public class UpdateCurrencyUseCase {
         Currency newCurrency = currencyRepository.getCurrency(newCurrencyCode)
                 .orElseThrow(UnknownCurrencyException::new);
 
-        report.getPrice().setCurrency(newCurrency);
-
-        Edit lastEdit = new Edit();
-        lastEdit.setAction(Action.EDITION);
-        lastEdit.setInstant(Instant.now());
-        lastEdit.setUser(connectedUser);
-        report.getPrice().setLastAmountEdit(lastEdit); // TODO[TRUE STORY] BUG: Wrong edit
+        report.setPrice(new Price(
+                report.getPrice().getAmount(),
+                report.getPrice().getLastAmountEdit(),
+                newCurrency,
+                new Edit(connectedUser, Instant.now(), Action.EDITION)));
+        // TODO with*() or static factory
 
         priceReportRepository.save(report);
 

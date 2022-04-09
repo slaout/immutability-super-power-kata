@@ -4,12 +4,14 @@ import com.github.slaout.immutability.exercise1.domain.edit.Action;
 import com.github.slaout.immutability.exercise1.domain.edit.Edit;
 import com.github.slaout.immutability.exercise1.domain.edit.User;
 import com.github.slaout.immutability.exercise1.domain.product.Ean;
+import com.github.slaout.immutability.exercise1.domain.report.Price;
 import com.github.slaout.immutability.exercise1.domain.report.PriceReport;
 import com.github.slaout.immutability.exercise1.exception.UnknownReportException;
 import com.github.slaout.immutability.exercise1.repository.PriceReportRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 
 @RequiredArgsConstructor
 public class UpdateAmountUseCase {
@@ -20,12 +22,12 @@ public class UpdateAmountUseCase {
         PriceReport report = priceReportRepository.getReport(productEan, sellerId)
                 .orElseThrow(UnknownReportException::new);
 
-        report.getPrice().setAmount(newAmount);
-
-        Edit lastEdit = report.getPrice().getLastAmountEdit();
-        lastEdit.setAction(Action.EDITION);
-        // TODO[TRUE STORY] BUG: Missing Instant
-        lastEdit.setUser(connectedUser);
+        report.setPrice(new Price(
+                newAmount,
+                new Edit(connectedUser, Instant.now(), Action.EDITION),
+                report.getPrice().getCurrency(),
+                report.getPrice().getLastCurrencyEdit()));
+        // TODO with*() or static factory
 
         priceReportRepository.save(report);
 

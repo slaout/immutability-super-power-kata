@@ -35,23 +35,15 @@ public class InsertPriceReportRowUseCase {
         Product product = productRepository.getProduct(productEan).orElseThrow(UnknownProductException::new);
         Seller seller = sellerRepository.getSeller(sellerId).orElseThrow(UnknownSellerException::new);
 
-        Edit creationEdit = new Edit();
-        creationEdit.setAction(Action.CREATION);
-        creationEdit.setInstant(Instant.now());
-        creationEdit.setUser(connectedUser);
+        Edit creationEdit = new Edit(connectedUser, Instant.now(), Action.CREATION);
 
-        Price price = Price.builder()
-                // TODO[TRUE STORY] STRANGE: amount not set; intentionally null or forgot to set it?
-                // TODO[TRUE STORY] BUG: Missing amount CREATION Edit
-                .currency(currencyRepository.getDefaultCurrency())
-                .lastCurrencyEdit(creationEdit)
-                .build();
+        Price price = new Price(
+                null, // At creation, user has not entered any amount yet
+                creationEdit,
+                currencyRepository.getDefaultCurrency(),
+                creationEdit);
 
-        PriceReport report = PriceReport.builder()
-                .product(product)
-                .seller(seller)
-                .price(price)
-                .build();
+        PriceReport report = new PriceReport(product, seller, price);
 
         priceReportRepository.save(report);
 

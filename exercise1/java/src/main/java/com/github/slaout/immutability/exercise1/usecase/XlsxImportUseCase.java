@@ -1,9 +1,11 @@
 package com.github.slaout.immutability.exercise1.usecase;
 
+import com.github.slaout.immutability.exercise1.domain.edit.Action;
 import com.github.slaout.immutability.exercise1.domain.edit.Edit;
 import com.github.slaout.immutability.exercise1.domain.edit.User;
 import com.github.slaout.immutability.exercise1.domain.product.Ean;
 import com.github.slaout.immutability.exercise1.domain.report.Currency;
+import com.github.slaout.immutability.exercise1.domain.report.Price;
 import com.github.slaout.immutability.exercise1.domain.report.PriceReport;
 import com.github.slaout.immutability.exercise1.exception.UnknownCurrencyException;
 import com.github.slaout.immutability.exercise1.exception.UnknownReportException;
@@ -45,15 +47,13 @@ public class XlsxImportUseCase {
                 .findFirst()
                 .orElseThrow(UnknownCurrencyException::new);
 
-        report.getPrice().setAmount(row.getNewAmount());
+        Edit lastEdit = new Edit(connectedUser, Instant.now(), Action.IMPORT);
 
-        report.getPrice().setCurrency(newCurrency);
-
-        Edit lastEdit = report.getPrice().getLastAmountEdit();
-        // TODO[TRUE STORY] BUG: Missing Action.IMPORT
-        lastEdit.setInstant(Instant.now());
-        lastEdit.setUser(connectedUser);
-        // TODO[TRUE STORY] BUG: Missing lastCurrencyEdit
+        report.setPrice(new Price(
+                row.getNewAmount(),
+                lastEdit,
+                newCurrency,
+                lastEdit));
     }
 
     @Value

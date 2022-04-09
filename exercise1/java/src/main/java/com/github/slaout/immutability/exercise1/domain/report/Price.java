@@ -1,21 +1,15 @@
 package com.github.slaout.immutability.exercise1.domain.report;
 
 import com.github.slaout.immutability.exercise1.domain.edit.Edit;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Value;
 
 import java.math.BigDecimal;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Value
 public class Price {
-    private BigDecimal amount;
-    private Edit lastAmountEdit;
+    BigDecimal amount;
+    Edit lastAmountEdit;
 
-    private Currency currency;
-    private Edit lastCurrencyEdit;
+    Currency currency;
+    Edit lastCurrencyEdit;
 }
