@@ -30,7 +30,7 @@ public class GetPriceReportsUseCase {
                 .collect(toMap(Currency::getCode, Currency::getExchangeRateToEuro));
 
         for (PriceReport report : reports) {
-            Currency currency = report.getPrice().getCurrency();
+            Currency currency = report.getPrice().getCurrency().getValue();
             BigDecimal exchangeRate = exchangeRates.get(currency.getCode());
             report.setPrice(report.getPrice().withSyncedExchangeRateToEuro(exchangeRate));
         }

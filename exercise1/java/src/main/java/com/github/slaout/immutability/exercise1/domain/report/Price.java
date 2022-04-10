@@ -1,18 +1,16 @@
 package com.github.slaout.immutability.exercise1.domain.report;
 
 import com.github.slaout.immutability.exercise1.domain.edit.Edit;
+import com.github.slaout.immutability.exercise1.domain.edit.Editable;
+import com.github.slaout.immutability.exercise1.domain.edit.NullableEditable;
 import lombok.Value;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
 @Value
 public class Price {
-    BigDecimal amount;
-    Edit lastAmountEdit;
-
-    Currency currency;
-    Edit lastCurrencyEdit;
+    NullableEditable<BigDecimal> amount;
+    Editable<Currency> currency;
 
     public static Price create(Currency currency, Edit creationEdit) {
         return new Price(
@@ -30,42 +28,32 @@ public class Price {
     }
 
     private Price(BigDecimal amount, Edit lastAmountEdit, Currency currency, Edit lastCurrencyEdit) {
-        this.amount = amount; // Null if user did not enter anything yet, or if user erased the input
-        this.lastAmountEdit = Objects.requireNonNull(lastAmountEdit, "lastAmountEdit");
-        this.currency = Objects.requireNonNull(currency, "currency");
-        this.lastCurrencyEdit = Objects.requireNonNull(lastCurrencyEdit, "lastCurrencyEdit");
+        this(
+                NullableEditable.of(amount, lastAmountEdit),
+                Editable.of(currency, lastCurrencyEdit));
+    }
+
+    private Price(NullableEditable<BigDecimal> amount, Editable<Currency> currency) {
+        this.amount = amount;
+        this.currency = currency;
     }
 
     public Price withEditedAmount(BigDecimal editedAmount, Edit edit) {
-        if (Objects.equals(this.amount, editedAmount)) {
-            return this;
-        }
-
         return new Price(
-                editedAmount,
-                edit,
-                this.currency,
-                this.lastCurrencyEdit);
+                NullableEditable.withEditedValue(this.amount, editedAmount, edit),
+                this.currency);
     }
 
     public Price withEditedCurrency(Currency editedCurrency, Edit edit) {
-        if (Objects.equals(this.currency, editedCurrency)) {
-            return this;
-        }
-
         return new Price(
                 this.amount,
-                this.lastAmountEdit,
-                editedCurrency,
-                edit);
+                this.currency.withEditedValue(editedCurrency, edit));
     }
 
     public Price withSyncedExchangeRateToEuro(BigDecimal syncedExchangeRateToEuro) {
         return new Price(
                 this.amount,
-                this.lastAmountEdit,
-                currency.withExchangeRateToEuro(syncedExchangeRateToEuro),
-                this.lastCurrencyEdit);
+                currency.withSyncedValue(currency.getValue().withExchangeRateToEuro(syncedExchangeRateToEuro)));
     }
 
 }
