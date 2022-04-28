@@ -1,10 +1,8 @@
 package com.github.slaout.immutability.exercise2.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Value;
 
-@Data
-@AllArgsConstructor
+@Value
 public class Option {
-    private String name;
+    String name;
 }

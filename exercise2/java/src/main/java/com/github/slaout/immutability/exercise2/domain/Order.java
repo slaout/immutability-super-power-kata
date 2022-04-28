@@ -1,13 +1,13 @@
 package com.github.slaout.immutability.exercise2.domain;
 
-import lombok.Data;
+import lombok.Value;
 
 import java.util.List;
 
-@Data
+@Value
 public class Order {
-    private long id;
-    private String userName;
-    private String address;
-    private List<OrderLine> lines;
+    long id;
+    String userName;
+    String address;
+    List<OrderLine> lines;
 }

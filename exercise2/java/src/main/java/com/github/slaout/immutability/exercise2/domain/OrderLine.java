@@ -1,15 +1,15 @@
 package com.github.slaout.immutability.exercise2.domain;
 
 import com.github.slaout.immutability.exercise2.domain.Product;
-import lombok.Data;
+import lombok.Value;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-@Data
+@Value
 public class OrderLine {
-    private Product product;
-    private int quantity;
-    private BigDecimal price;
-    private List<Option> options;
+    Product product;
+    int quantity;
+    BigDecimal price;
+    List<Option> options;
 }
