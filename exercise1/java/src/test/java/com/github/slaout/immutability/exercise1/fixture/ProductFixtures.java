@@ -7,6 +7,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ProductFixtures {
 
+    // TODO KNOWN_* => *_WITH_REPORT  &  ANOTHER_* => *_WITHOUT_REPORT ?
     public static final Ean KNOWN_PRODUCT_EAN = new Ean("known");
     public static final Ean ANOTHER_KNOWN_PRODUCT_EAN = new Ean("another-known");
     public static final Ean UNKNOWN_EAN = new Ean("unknown");

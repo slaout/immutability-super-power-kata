@@ -8,6 +8,7 @@ import lombok.experimental.UtilityClass;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 
 @UtilityClass
 public class EditFixtures {
@@ -21,5 +22,10 @@ public class EditFixtures {
     public static final Action ANY_ACTION = Action.EDITION;
 
     public static final Edit ANY_EDIT = Edit.restoreFromDatabase(ANY_USER, ANY_INSTANT, ANY_ACTION);
+
+    public static final Edit SOME_EDIT = Edit.restoreFromDatabase(
+            new User("last-login", "Last Full Name"),
+            Instant.now().minus(1, ChronoUnit.DAYS),
+            Action.CREATION);
 
 }

@@ -1,5 +1,6 @@
 package com.github.slaout.immutability.exercise1.usecase;
 
+import com.github.slaout.immutability.exercise1.domain.edit.Edit;
 import com.github.slaout.immutability.exercise1.domain.report.PriceReport;
 import com.github.slaout.immutability.exercise1.exception.UnknownReportException;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ class UpdateAmountUseCaseTest extends TestBase {
     }
 
     @Test
-    void it_shouldThrowUnknownReportException_whenProductAndSellerPairIsUnknown() {
+    void it_shouldThrowUnknownReportException_whenProductAndSellerPairHasNoReport() {
         // GIVEN
         givenExistingReportForKnownProductAndSeller();
 
@@ -33,8 +34,32 @@ class UpdateAmountUseCaseTest extends TestBase {
         // THEN
         assertThrows(UnknownReportException.class, when);
     }
-    // TODO when one of the properties of the pair
-    // TODO when the other of the properties of the pair
+
+    @Test
+    void it_shouldThrowUnknownReportException_whenProductHasNoReportWithTheSeller() {
+        // GIVEN
+        givenExistingReportForKnownProductAndSeller();
+
+        // WHEN
+        Executable when = () ->
+                cut.updateAmount(KNOWN_PRODUCT_EAN, ANOTHER_KNOWN_SELLER_ID, ANY_AMOUNT, ANY_USER);
+
+        // THEN
+        assertThrows(UnknownReportException.class, when);
+    }
+
+    @Test
+    void it_shouldThrowUnknownReportException_whenSellerHasNoReportWithTheProduct() {
+        // GIVEN
+        givenExistingReportForKnownProductAndSeller();
+
+        // WHEN
+        Executable when = () ->
+                cut.updateAmount(ANOTHER_KNOWN_PRODUCT_EAN, KNOWN_SELLER_ID, ANY_AMOUNT, ANY_USER);
+
+        // THEN
+        assertThrows(UnknownReportException.class, when);
+    }
 
     @Test
     void it_shouldChangeAmount_whenSettingANewAmount() {
@@ -64,11 +89,50 @@ class UpdateAmountUseCaseTest extends TestBase {
         assertThat(savedReport.getPrice().getAmount().getValue()).isEqualTo(newAmount);
     }
 
-    // TODO it_shouldKeepAmountEdit_whenSettingTheSameAmount
+    @Test
+    void it_shouldKeepAmountEdit_whenSettingTheSameAmount() {
+        // GIVEN
+        BigDecimal currentAmount = new BigDecimal("20");
+        Edit previousEdit = SOME_EDIT;
+        givenExistingReportForKnownProductAndSellerHaving(currentAmount, previousEdit);
 
-    // TODO it_shouldKeepCurrencyEdit_whenSettingANewAmount
+        // WHEN
+        cut.updateAmount(KNOWN_PRODUCT_EAN, KNOWN_SELLER_ID, currentAmount, ANY_USER);
 
-    // TODO it_shouldReturnTheInsertedRow_whenInserting
+        // THEN
+        PriceReport savedReport = priceReportRepository.getSavedReport();
+        assertThat(savedReport.getPrice().getAmount().getLastEdit()).isEqualTo(previousEdit);
+    }
+
+    @Test
+    void it_shouldKeepCurrencyEdit_whenSettingANewAmount() {
+        // GIVEN
+        BigDecimal oldAmount = new BigDecimal("10");
+        BigDecimal newAmount = new BigDecimal("20");
+        Edit previousEdit = SOME_EDIT;
+        givenExistingReportForKnownProductAndSellerHaving(oldAmount, previousEdit);
+
+        // WHEN
+        cut.updateAmount(KNOWN_PRODUCT_EAN, KNOWN_SELLER_ID, newAmount, ANY_USER);
+
+        // THEN
+        PriceReport savedReport = priceReportRepository.getSavedReport();
+        assertThat(savedReport.getPrice().getCurrency().getLastEdit()).isEqualTo(previousEdit);
+    }
+
+    @Test
+    void it_shouldReturnTheInsertedRow_whenInserting() {
+        // GIVEN
+        givenExistingReportForKnownProductAndSeller();
+        BigDecimal newAmount = new BigDecimal("20");
+
+        // WHEN
+        PriceReport returnedReport = cut.updateAmount(KNOWN_PRODUCT_EAN, KNOWN_SELLER_ID, newAmount, ANY_USER);
+
+        // THEN
+        PriceReport savedReport = priceReportRepository.getSavedReport();
+        assertThat(returnedReport).isEqualTo(savedReport);
+    }
 
     // TODO Try analyzing with PiTest
 
