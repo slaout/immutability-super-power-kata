@@ -1,6 +1,7 @@
 package com.github.slaout.immutability.exercise1.usecase;
 
 import com.github.slaout.immutability.exercise1.domain.edit.Edit;
+import com.github.slaout.immutability.exercise1.domain.report.Currency;
 import com.github.slaout.immutability.exercise1.domain.report.Price;
 import com.github.slaout.immutability.exercise1.domain.report.PriceReport;
 import com.github.slaout.immutability.exercise1.doubles.TestPriceReportRepository;
@@ -20,7 +21,7 @@ public class TestBase {
 
     protected void givenExistingReportForKnownProductAndSeller() {
         givenKnownProductAndSeller();
-        priceReportRepository.setKnownReport(EXISTING_REPORT_FOR_KNOWN_PRODUCT_AND_SELLER);
+        priceReportRepository.setKnownReport(existingReportForKnownProductAndSeller());
     }
 
     protected void givenExistingReportForKnownProductAndSellerHaving(BigDecimal amount, Edit edit) {
@@ -28,7 +29,19 @@ public class TestBase {
         priceReportRepository.setKnownReport(new PriceReport(
                 KNOWN_PRODUCT,
                 KNOWN_SELLER,
-                Price.restoreFromDatabase(amount, edit, ANY_CURRENCY, edit)));
+                Price.restoreFromDatabase(amount, edit, anyCurrency(), edit)));
+    }
+
+    protected void givenExistingReportForKnownProductAndSellerHaving(String currencyCode, Edit edit) {
+        givenKnownProductAndSeller();
+        priceReportRepository.setKnownReport(new PriceReport(
+                KNOWN_PRODUCT,
+                KNOWN_SELLER,
+                Price.restoreFromDatabase(
+                        ANY_AMOUNT,
+                        edit,
+                        new Currency(currencyCode, ANY_EXCHANGE_RATE_TO_EURO),
+                        edit)));
     }
 
     protected void givenKnownProductAndSeller() {

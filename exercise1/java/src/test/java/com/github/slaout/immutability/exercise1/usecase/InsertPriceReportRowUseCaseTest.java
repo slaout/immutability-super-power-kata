@@ -6,9 +6,6 @@ import com.github.slaout.immutability.exercise1.domain.edit.User;
 import com.github.slaout.immutability.exercise1.domain.report.Currency;
 import com.github.slaout.immutability.exercise1.domain.report.PriceReport;
 import com.github.slaout.immutability.exercise1.doubles.TestCurrencyRepository;
-import com.github.slaout.immutability.exercise1.doubles.TestPriceReportRepository;
-import com.github.slaout.immutability.exercise1.doubles.TestProductRepository;
-import com.github.slaout.immutability.exercise1.doubles.TestSellerRepository;
 import com.github.slaout.immutability.exercise1.exception.DuplicateRowException;
 import com.github.slaout.immutability.exercise1.exception.UnknownProductException;
 import com.github.slaout.immutability.exercise1.exception.UnknownSellerException;
@@ -43,7 +40,7 @@ class InsertPriceReportRowUseCaseTest extends TestBase {
 
         // WHEN
         Executable when = () ->
-                cut.insertPriceReportRow(KNOWN_PRODUCT_EAN, KNOWN_SELLER_ID, ANY_USER);
+                cut.insertPriceReportRow(KNOWN_PRODUCT_EAN, KNOWN_SELLER_ID, anyUser());
 
         // THEN
         assertThrows(DuplicateRowException.class, when);
@@ -56,7 +53,7 @@ class InsertPriceReportRowUseCaseTest extends TestBase {
 
         // WHEN
         Executable when = () ->
-                cut.insertPriceReportRow(UNKNOWN_EAN, KNOWN_SELLER_ID, ANY_USER);
+                cut.insertPriceReportRow(UNKNOWN_EAN, KNOWN_SELLER_ID, anyUser());
 
         // THEN
         assertThrows(UnknownProductException.class, when);
@@ -69,7 +66,7 @@ class InsertPriceReportRowUseCaseTest extends TestBase {
 
         // WHEN
         Executable when = () ->
-                cut.insertPriceReportRow(KNOWN_PRODUCT_EAN, UNKNOWN_SELLER_ID, ANY_USER);
+                cut.insertPriceReportRow(KNOWN_PRODUCT_EAN, UNKNOWN_SELLER_ID, anyUser());
 
         // THEN
         assertThrows(UnknownSellerException.class, when);
@@ -82,7 +79,7 @@ class InsertPriceReportRowUseCaseTest extends TestBase {
         productRepository.setKnownProduct(ANOTHER_KNOWN_PRODUCT);
 
         // WHEN
-        cut.insertPriceReportRow(ANOTHER_KNOWN_PRODUCT_EAN, KNOWN_SELLER_ID, ANY_USER);
+        cut.insertPriceReportRow(ANOTHER_KNOWN_PRODUCT_EAN, KNOWN_SELLER_ID, anyUser());
 
         // THEN
         PriceReport savedReport = priceReportRepository.getSavedReport();
@@ -97,7 +94,7 @@ class InsertPriceReportRowUseCaseTest extends TestBase {
         sellerRepository.setKnownSeller(ANOTHER_KNOWN_SELLER);
 
         // WHEN
-        cut.insertPriceReportRow(KNOWN_PRODUCT_EAN, ANOTHER_KNOWN_SELLER_ID, ANY_USER);
+        cut.insertPriceReportRow(KNOWN_PRODUCT_EAN, ANOTHER_KNOWN_SELLER_ID, anyUser());
 
         // THEN
         PriceReport savedReport = priceReportRepository.getSavedReport();
@@ -111,7 +108,7 @@ class InsertPriceReportRowUseCaseTest extends TestBase {
         givenKnownProductAndSeller();
 
         // WHEN
-        cut.insertPriceReportRow(KNOWN_PRODUCT_EAN, KNOWN_SELLER_ID, ANY_USER);
+        cut.insertPriceReportRow(KNOWN_PRODUCT_EAN, KNOWN_SELLER_ID, anyUser());
 
         // THEN
         PriceReport savedReport = priceReportRepository.getSavedReport();
@@ -125,7 +122,7 @@ class InsertPriceReportRowUseCaseTest extends TestBase {
         currencyRepository.setDefaultCurrency(DEFAULT_CURRENCY);
 
         // WHEN
-        cut.insertPriceReportRow(KNOWN_PRODUCT_EAN, KNOWN_SELLER_ID, ANY_USER);
+        cut.insertPriceReportRow(KNOWN_PRODUCT_EAN, KNOWN_SELLER_ID, anyUser());
 
         // THEN
         PriceReport savedReport = priceReportRepository.getSavedReport();

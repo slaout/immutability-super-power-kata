@@ -13,7 +13,9 @@ import java.time.temporal.ChronoUnit;
 @UtilityClass
 public class EditFixtures {
 
-    public static final User ANY_USER = new User("someone", "Some One");
+    public static User anyUser() {
+        return new User("someone", "Some One");
+    }
 
     public static final Instant NOW = Instant.parse("2022-04-26T10:30:00Z");
     public static final Instant ANY_INSTANT = Instant.now();
@@ -21,7 +23,9 @@ public class EditFixtures {
 
     public static final Action ANY_ACTION = Action.EDITION;
 
-    public static final Edit ANY_EDIT = Edit.restoreFromDatabase(ANY_USER, ANY_INSTANT, ANY_ACTION);
+    public static Edit anyEdit() {
+        return Edit.restoreFromDatabase(anyUser(), ANY_INSTANT, ANY_ACTION);
+    }
 
     public static final Edit SOME_EDIT = Edit.restoreFromDatabase(
             new User("last-login", "Last Full Name"),
